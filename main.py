@@ -37,9 +37,18 @@ def newpost():
     if request.method == 'POST':
         title = request.form['title']
         body = request.form['body']
+        if not body:
+            flash('Please fill out the body')
+            return render_template('newpost.html',title=title,body=body)
+        if not title:
+            flash('Please fill out the title')
+            return render_template('newpost.html',title=title,body=body)
+
+
         blogpost = Blog(title, body)
         db.session.add(blogpost)
         db.session.commit()
+
         return redirect('/')
 
 

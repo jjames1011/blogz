@@ -2,11 +2,11 @@
 <h1>Add a blog entry!</h1>
 <form action='/newpost' method="post">
   <label>Title
-    <input type='text' name='title'/>
+    <input type='text' name='title' value='{{title}}'/>
   </label>
 
   <label>body:
-    <input type='text' name='body'>
+    <input type='text' name='body' value='{{body}}'>
   </label>
   <input type='submit' value='post entry'>
 
