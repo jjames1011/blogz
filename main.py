@@ -28,7 +28,15 @@ def index():
 def blog():
 
     blog_posts = Blog.query.all()
-    print(blog_posts)
+    if request.args.get('id'):
+        post_id = request.args.get('id')
+        #post_id = int(post_id)
+        print(post_id)
+        single_post = Blog.query.filter_by(id=post_id).all()
+        print(single_post[0].title)
+
+
+        return render_template('singlepost.html',single_post=single_post)
 
     return render_template('blog.html', blog_posts=blog_posts)
 
@@ -37,6 +45,7 @@ def newpost():
     if request.method == 'POST':
         title = request.form['title']
         body = request.form['body']
+        #if fields are not filled out
         if not body:
             flash('Please fill out the body')
             return render_template('newpost.html',title=title,body=body)
@@ -48,8 +57,12 @@ def newpost():
         blogpost = Blog(title, body)
         db.session.add(blogpost)
         db.session.commit()
+        single_post = Blog.query.filter_by(title=blogpost.title).all()
 
-        return redirect('/')
+
+
+
+        return render_template('singlepost.html',single_post=single_post)
 
 
 

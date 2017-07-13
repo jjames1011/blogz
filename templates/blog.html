@@ -1,6 +1,6 @@
 {% extends 'base.html' %}{% block content %} {% if blog_posts|length == 0 %}
 <h1>No blog posts yet</h1>
 <h3>Be the first to <a href='newpost'>add</a> a post!</h3> {% else %} {% for blog_post in blog_posts %}
-<h3>{{blog_post.title}}</h3>
+<a href='/blog?id={{blog_post.id}}'><h3>{{blog_post.title}}</h3></a>
 <p>{{blog_post.body}}</p>
 {% endfor %} {% endif %} {% endblock %}
