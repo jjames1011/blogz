@@ -46,11 +46,11 @@ def newpost():
         title = request.form['title']
         body = request.form['body']
         #if fields are not filled out
-        if not body:
-            flash('Please fill out the body')
-            return render_template('newpost.html',title=title,body=body)
         if not title:
             flash('Please fill out the title')
+            return render_template('newpost.html',title=title,body=body)
+        if not body:
+            flash('Please fill out the body')
             return render_template('newpost.html',title=title,body=body)
 
 
