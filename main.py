@@ -1,8 +1,8 @@
 from flask import Flask, request, redirect, render_template, session, flash
 import cgi
 from app import app, db
-from models import Blog #,User
-#from hashutils import make_pw_hash, check_pw_hash
+from models import Blog, User
+from hashutils import make_pw_hash, check_pw_hash
 
 app.secret_key = 'y337kGcys&zP3B'
 
@@ -11,11 +11,68 @@ def logged_in_user():
     owner = User.query.filter_by(email=session['user']).first()
     return owner
 
+def is_email(string):
+    atsign_index = string.find('@')
+    atsign_present = atsign_index >= 0
+    if not atsign_present:
+        return False
+    else:
+        domain_dot_index = string.find('.', atsign_index)
+        domain_dot_present = domain_dot_index >= 0
+        return domain_dot_present
+
 
 @app.route('/')
 def index():
     return redirect('/blog')
 
+@app.route('/signup', methods=['POST','GET'])
+def signup():
+    if request.method == 'GET':
+        return render_template('signup.html')
+
+    elif request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        verify = request.form['verify']
+        if not is_email(email):
+            flash(email + ', is not a valid email')
+            return redirect('/signup')
+        email_db_count = User.query.filter_by(email=email).count()
+
+        if email_db_count > 0:
+            flash(email + 'already has an existing account')
+            return redirect('/signup')
+        if password != verify:
+            flash('oops! it looks like your passwords did not match!')
+            return redirect('/signup')
+        user = User(email,password)
+        db.session.add(user)
+        db.session.commit()
+        session['user'] = user.email
+        return redirect('/')
+
+
+@app.route('/login', methods=['POST','GET'])
+def login():
+    if request.method == 'GET':
+        return render_template('login.html')
+    elif request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        users = User.query.filter_by(email=email)
+        if users.count() == 1:
+            user = users.first()
+            session['user'] = user.email
+            flash('welcome back, '+user.email)
+            return redirect('/')
+        flash('bad username or password')
+        return redirect('/login')
+
+@app.route('/logout', methods=['POST','GET'])
+def logout():
+    del session['user']
+    return redirect('/')
 
 
 @app.route('/blog')

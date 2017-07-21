@@ -15,7 +15,7 @@ class Blog(db.Model):
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(120))
+    email = db.Column(db.String(120), unique=True)
     pw_hash = db.Column(db.String(120))
     blogs  = db.relationship('Blog', backref='owner')
 
