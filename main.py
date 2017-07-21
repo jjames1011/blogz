@@ -7,6 +7,11 @@ from models import Blog #,User
 app.secret_key = 'y337kGcys&zP3B'
 
 
+def logged_in_user():
+    owner = User.query.filter_by(email=session['user']).first()
+    return owner
+
+
 @app.route('/')
 def index():
     return redirect('/blog')
@@ -34,6 +39,7 @@ def newpost():
     if request.method == 'POST':
         title = request.form['title']
         body = request.form['body']
+
         #if fields are not filled out
         if not title:
             flash('Please fill out the title')
@@ -42,8 +48,8 @@ def newpost():
             flash('Please fill out the body')
             return render_template('newpost.html',title=title,body=body)
 
-
-        blogpost = Blog(title, body)
+#note that I haven't implemented a log in route handler yet so there is no session thus logged_in_user function will break
+        blogpost = Blog(title, body, logged_in_user())
         db.session.add(blogpost)
         db.session.commit()
         single_post = Blog.query.filter_by(title=blogpost.title).first()
