@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 app= Flask(__name__)
 app.config['DEBUG'] = True
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://build-a-blog:cheese@localhost:8889/build-a-blog'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://blogz:cheese@localhost:8889/blogz'
 app.config['SQLALCHEY_ECHO'] = True
 db = SQLAlchemy(app)
 app.secret_key = 'y337kGcys&zP3B'
@@ -32,8 +32,8 @@ def blog():
         post_id = request.args.get('id')
         #post_id = int(post_id)
         print(post_id)
-        single_post = Blog.query.filter_by(id=post_id).all()
-        print(single_post[0].title)
+        single_post = Blog.query.filter_by(id=post_id).first()
+        print(single_post.title)
 
 
         return render_template('singlepost.html',single_post=single_post)
@@ -57,7 +57,7 @@ def newpost():
         blogpost = Blog(title, body)
         db.session.add(blogpost)
         db.session.commit()
-        single_post = Blog.query.filter_by(title=blogpost.title).all()
+        single_post = Blog.query.filter_by(title=blogpost.title).first()
 
 
 
