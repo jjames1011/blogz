@@ -65,7 +65,7 @@ def login():
             user = users.first()
             session['user'] = user.email
             flash('welcome back, '+user.email)
-            return redirect('/')
+            return redirect('/newpost')
         flash('bad username or password')
         return redirect('/login')
 
