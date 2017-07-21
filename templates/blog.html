@@ -1,10 +1,4 @@
-{% extends 'base.html' %} {% if session['user'] %}
-<p><a href='/logout'>Logout</a></p>
-
-{% else %}
-<p><a href='login'>Login</a></p>
-
-{% endif %} {% block content %} {% if blog_posts|length == 0 %}
+{% extends 'base.html' %} {% block content %} {% if blog_posts|length == 0 %}
 <h1>No blog posts yet</h1>
 <h3>Be the first to <a href='newpost'>add</a> a post!</h3> {% else %} {% for blog_post in blog_posts %}
 <a href='/blog?id={{blog_post.id}}'><h3>{{blog_post.title}}</h3></a>
