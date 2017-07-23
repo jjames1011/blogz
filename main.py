@@ -84,18 +84,32 @@ def signup():
 def login():
     if request.method == 'GET':
         return render_template('login.html')
+
     elif request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
         users = User.query.filter_by(email=email)
+        if not is_email(email):
+            flash('Please enter a valid email')
+            return render_template('login.html',email=email)
         if users.count() == 1:
             user = users.first()
-            if check_pw_hash(password, user.pw_hash):
+        else:
+            flash(email + ' does not have an account. Feel free to create one by clicking the link below!')
+            return render_template('login.html',email=email)
+        if check_pw_hash(password, user.pw_hash):
                 session['user'] = user.email
                 flash('welcome back, '+user.email)
                 return redirect('/newpost')
-        flash('bad username or password')
-        return render_template('login.html', email=email)
+        elif password == '':
+            flash('Please enter a password.')
+            return render_template('login.html',email=email)
+        elif not check_pw_hash(password,user.pw_hash):
+            flash('opps, it looks like you have provided a wrong password. Please try again.')
+            return render_template('login.html', email=email)
+
+
+    return render_template('login.html', email=email)
 
 @app.route('/logout', methods=['POST','GET'])
 def logout():
@@ -121,8 +135,14 @@ def blog():
     if request.args.get('user_id'):
         user_id = request.args.get('user_id')
         user_posts = Blog.query.filter_by(owner_id=user_id).all()
+        user = User.query.filter_by(id=user_id).first()
 
-        return render_template('singleuser.html', user_id=user_id,user_posts=user_posts)
+        if len(user_posts) == 0:
+            flash(user.email + ' has not posted anything yet! :(')
+
+
+
+        return render_template('singleuser.html', user_id=user_id,user_posts=user_posts,user=user)
 
 
     return render_template('blog.html', blog_posts=blog_posts)
