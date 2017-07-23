@@ -21,7 +21,11 @@ def is_email(string):
         domain_dot_present = domain_dot_index >= 0
         return domain_dot_present
 
-
+@app.before_request
+def require_login():
+    endpoints_without_login = ['blog','login','signup']
+    if not ('user' in session or request.endpoint in endpoints_without_login):
+        return redirect('signup')
 @app.route('/')
 def index():
     return redirect('/blog')
