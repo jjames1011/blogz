@@ -23,12 +23,15 @@ def is_email(string):
 
 @app.before_request
 def require_login():
-    endpoints_without_login = ['blog','login','signup']
+    endpoints_without_login = ['blog','login','signup', 'index']
     if not ('user' in session or request.endpoint in endpoints_without_login):
-        return redirect('signup')
+        return redirect('login')
 @app.route('/')
 def index():
-    return redirect('/blog')
+    list_users = User.query.all()
+
+
+    return render_template('index.html', list_users=list_users)
 
 @app.route('/signup', methods=['POST','GET'])
 def signup():
@@ -97,22 +100,30 @@ def login():
 @app.route('/logout', methods=['POST','GET'])
 def logout():
     del session['user']
-    return redirect('/')
+    return redirect('/blog')
 
 
 @app.route('/blog')
 def blog():
 
     blog_posts = Blog.query.all()
+    # if there is a query parameter
     if request.args.get('id'):
         post_id = request.args.get('id')
-        #post_id = int(post_id)
-        print(post_id)
+
+
         single_post = Blog.query.filter_by(id=post_id).first()
-        print(single_post.title)
+
 
 
         return render_template('singlepost.html',single_post=single_post)
+
+    if request.args.get('user_id'):
+        user_id = request.args.get('user_id')
+        user_posts = Blog.query.filter_by(owner_id=user_id).all()
+
+        return render_template('singleuser.html', user_id=user_id,user_posts=user_posts)
+
 
     return render_template('blog.html', blog_posts=blog_posts)
 
