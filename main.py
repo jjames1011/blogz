@@ -38,12 +38,21 @@ def signup():
         if email == '':
             flash('Please fill out the email form.')
             return render_template('signup.html')
+        if len(email)<3:
+            flash('hmm, your email seems to be too short. ')
+            return render_template('signup.html')
+        if len(password)<3:
+            flash('hmm, your password seems to be too short. Passwords must be longer than 3 characters.')
+            return render_template('signup.html', email=email)
+
         if password == '':
             flash('Please fill out the password form.')
             return render_template('signup.html', email=email)
         if verify == '':
             flash('Please verify your password.')
             return render_template('signup.html', email=email)
+
+
 
         if not is_email(email):
             flash(email + ', is not a valid email')
@@ -55,7 +64,7 @@ def signup():
             return redirect('/signup')
         if password != verify:
             flash('oops! it looks like your passwords did not match!')
-            return redirect('/signup')
+            return render_template('signup.html', email=email)
         user = User(email,password)
         db.session.add(user)
         db.session.commit()
