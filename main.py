@@ -50,7 +50,8 @@ def signup():
         db.session.add(user)
         db.session.commit()
         session['user'] = user.email
-        return redirect('/')
+        flash('Welcome, '+ email)
+        return redirect('/newpost')
 
 
 @app.route('/login', methods=['POST','GET'])
