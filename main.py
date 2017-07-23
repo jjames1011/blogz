@@ -35,6 +35,16 @@ def signup():
         email = request.form['email']
         password = request.form['password']
         verify = request.form['verify']
+        if email == '':
+            flash('Please fill out the email form.')
+            return render_template('signup.html')
+        if password == '':
+            flash('Please fill out the password form.')
+            return render_template('signup.html', email=email)
+        if verify == '':
+            flash('Please verify your password.')
+            return render_template('signup.html', email=email)
+
         if not is_email(email):
             flash(email + ', is not a valid email')
             return redirect('/signup')
@@ -69,7 +79,7 @@ def login():
                 flash('welcome back, '+user.email)
                 return redirect('/newpost')
         flash('bad username or password')
-        return redirect('/login')
+        return render_template('login.html', email=email)
 
 @app.route('/logout', methods=['POST','GET'])
 def logout():
