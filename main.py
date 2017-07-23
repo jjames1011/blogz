@@ -63,9 +63,10 @@ def login():
         users = User.query.filter_by(email=email)
         if users.count() == 1:
             user = users.first()
-            session['user'] = user.email
-            flash('welcome back, '+user.email)
-            return redirect('/newpost')
+            if check_pw_hash(password, user.pw_hash):
+                session['user'] = user.email
+                flash('welcome back, '+user.email)
+                return redirect('/newpost')
         flash('bad username or password')
         return redirect('/login')
 
