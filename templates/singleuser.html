@@ -1,5 +1,5 @@
 {% extends 'base.html' %} {% block content %}
-<h3>Posts by: {{user.email}}</h3> {%for post in user_posts %}
+<h3>Posts by: {{user.email}}</h3> {%for post in user.blogs %}
 
 <a href='/blog?id={{post.id}}' />
 <h3>{{post.title}}</h3></a>
