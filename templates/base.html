@@ -1,36 +1,44 @@
 <!DOCTYPE html>
-<html>
+<html lang='en'>
 
 <head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
   <title>build-a-blog!</title>
-  <style>
-    #nav {
-      display: inline;
-    }
-  </style>
+  <!-- This site utilizes Bootstrap -->
+  <!--<link href='css/bootstrap.min.css' rel='stylesheet'>-->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
 
 </head>
-</body>
-<h1>Coolest Blog Evar!</h1> {% if session['user'] %}
-<p><a href='/logout'>Logout</a></p>
 
-{% else %}
-<p><a href='login'>Login</a></p>
+<body>
+  <div class='container'>
+    <div class='row'>
+      <div class='col-md-6'>
+        <h1>Blogz</h1> {% if session['user'] %}
+        <p><a href='/logout'>Logout</a></p>
 
-{% endif %}
-<p id='nav'><a href='/blog'>Main Blog Page</a></p>
-<p id='nav'><a href='/newpost'>Add a Blog Entry</a> </p>
-<p id='nav'><a href='/'>List Of Users</a></p>
+        {% else %}
+        <p><a href='login'>Login</a></p>
+      </div>
+      <div class='col-md-6'>
+        {% endif %}
+        <p><a href='/blog'>Main Blog Page</a></p>
+        <p><a href='/newpost'>Add a Blog Entry</a> </p>
+        <p><a href='/'>List Of Users</a></p>
+      </div>
+    </div>
+    {% with messages = get_flashed_messages() %} {% if messages %}
+    <ul>
+      {% for message in messages %}
+      <li>{{message}}</li>
+      {% endfor %}
+    </ul>
 
-{% with messages = get_flashed_messages() %} {% if messages %}
-<ul>
-  {% for message in messages %}
-  <li>{{message}}</li>
-  {% endfor %}
-</ul>
-
-{% endif %} {% endwith %} {% block content %} {% endblock %}
-
+    {% endif %} {% endwith %} {% block content %} {% endblock %}
+  </div>
 
 </body>
 
