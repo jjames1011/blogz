@@ -7,29 +7,31 @@
   <meta name='viewport' content='width=device-width, initial-scale=1'>
   <title>build-a-blog!</title>
   <!-- This site utilizes Bootstrap -->
-  <!--<link rel='stylesheet' href="{{ url_for('static',filename='styles/bootstrap.min.css') }}" type='text/css'>-->
-  <link rel='stylesheet' href="{{ url_for('static',filename='styles/stylesheet.css ') }}" type='text/css'>
+  <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
+  <!--<link rel='stylesheet' href="{{ url_for('static',filename='stylesheets/bootstrap.min.css') }}" type='text/css'>-->
+  <!--<link rel='stylesheet' href="{{ url_for('static',filename='styles/stylesheet.css ') }}" type='text/css'>-->
 
 
 </head>
 
 <body>
-  <div class='container'>
-    <div class='row'>
-      <div class='col-md-6'>
-        <h1>Blogz</h1> {% if session['user'] %}
-        <p><a href='/logout'>Logout</a></p>
 
-        {% else %}
-        <p><a href='login'>Login</a></p>
-      </div>
-      <div class='col-md-6'>
-        {% endif %}
-        <p><a href='/blog'>Main Blog Page</a></p>
-        <p><a href='/newpost'>Add a Blog Entry</a> </p>
-        <p><a href='/'>List Of Users</a></p>
-      </div>
-    </div>
+  <div class='container'>
+    <h1>Blogz</h1> {% if session['user'] %}
+
+
+    <p><a href='/logout'>Logout</a></p>
+
+    {% else %}
+    <p><a href='login'>Login</a></p>
+
+
+    {% endif %}
+    <p><a href='/blog'>Main Blog Page</a></p>
+    <p><a href='/newpost'>Add a Blog Entry</a> </p>
+    <p><a href='/'>List Of Users</a></p>
+
+
     {% with messages = get_flashed_messages() %} {% if messages %}
     <ul>
       {% for message in messages %}
@@ -38,8 +40,8 @@
     </ul>
 
     {% endif %} {% endwith %} {% block content %} {% endblock %}
-  </div>
 
+  </div>
 </body>
 
 </html>
